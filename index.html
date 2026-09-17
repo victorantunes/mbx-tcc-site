@@ -215,7 +215,7 @@
       <li><b>O cluster mais equilibrado é o mais fácil de explicar, não o mais difícil.</b> O R² mede
         o quanto o modelo acerta as diferenças dentro do cluster, não a distância até o empate, e o
         cluster 0 é o que tem os municípios mais diferentes entre si.</li>
-      <li><b>Padrões espaciais.</b> O voto não se distribui ao acaso no mapa: municípios vizinhos
+      <li><b>Padrões espaciais.</b> O voto não se distribui ao acaso no mapa. Municípios vizinhos
         compartilham perfis de voto semelhantes (Índice de Moran I = 0,889; p = 0,001), com Lula
         predominando no Norte/Nordeste e Bolsonaro no Centro-Sul.</li>
     </ol>
@@ -224,7 +224,7 @@
   <section id="metodologia">
     <span class="eyebrow">Metodologia</span>
     <p class="prose">A análise foi conduzida em quatro etapas, utilizando técnicas apresentadas ao
-    longo do curso: da correlação bivariada simples até o teste formal de dependência espacial dos
+    longo do curso, da correlação bivariada simples até o teste formal de dependência espacial dos
     resultados.</p>
 
     <div style="height:24px"></div>
@@ -236,7 +236,7 @@
         <span class="stage-eyebrow">Correlação</span>
         <p>A primeira etapa calculou a <b>correlação de Pearson e Spearman</b> entre as 13
         variáveis estruturais e os desfechos eleitorais (p &lt; 0,05). No painel abaixo, células
-        mais escuras indicam correlação mais forte: azul indica relação negativa; vermelho, relação
+        mais escuras indicam correlação mais forte. Azul indica relação negativa; vermelho, relação
         positiva.</p>
         <figure class="fig-wide">
           <a href="assets/heatmap_correlacoes.png" target="_blank" rel="noopener">
@@ -245,7 +245,7 @@
           <figcaption><b>Heatmap de correlações de Pearson</b> entre 13 variáveis estruturais e 11 desfechos eleitorais, no agregado nacional.</figcaption>
         </figure>
         <p style="margin-top:18px;">Como passo intermediário, o trabalho também verificou como as
-        próprias variáveis estruturais se relacionam entre si: municípios mais brancos tendem a ser
+        próprias variáveis estruturais se relacionam entre si. Municípios mais brancos tendem a ser
         mais ricos, e municípios mais pardos, mais pobres, numa magnitude quase idêntica à relação
         entre renda e voto.</p>
         <div class="fig-pair">
@@ -259,7 +259,7 @@
             <a href="assets/religiao_vs_renda.png" target="_blank" rel="noopener">
               <img src="assets/religiao_vs_renda.png" alt="Relação entre composição religiosa e renda per capita">
             </a>
-            <figcaption>Religião × renda per capita: associação bem mais fraca.</figcaption>
+            <figcaption>Religião × renda per capita, associação bem mais fraca.</figcaption>
           </figure>
         </div>
         <div class="callout">
@@ -288,7 +288,7 @@
         <p style="margin-top:18px;">A silhueta é maior em k=2 (0,261), mas k=2 força uma dicotomia
         rico/pobre que esconde o grupo de renda intermediária, justamente o de votação mais
         equilibrada entre Lula e Bolsonaro. Por isso, optou-se por k=3 como desenho principal, com
-        k=4 testado como robustez: k=4 apenas refina os extremos de renda já identificados em k=3,
+        k=4 testado como robustez, que apenas refina os extremos de renda já identificados em k=3,
         sem mudar as conclusões (R² de Lula 2T entre 0,53 e 0,75 em k=3, e entre 0,52 e 0,77 em
         k=4).</p>
         <figure class="fig-wide">
@@ -314,7 +314,7 @@
           <a href="assets/perfil_eleitoral.png" target="_blank" rel="noopener">
             <img src="assets/perfil_eleitoral.png" alt="Perfil eleitoral médio por cluster nas arenas presidencial, estadual e municipal">
           </a>
-          <figcaption><b>Perfil eleitoral por cluster</b>, além do 2º turno presidencial: blocos ideológicos em governador e prefeito. A diferença entre clusters é maior em presidente/governador do que na eleição municipal.</figcaption>
+          <figcaption><b>Perfil eleitoral por cluster</b>, além do 2º turno presidencial, com os blocos ideológicos em governador e prefeito. A diferença entre clusters é maior em presidente/governador do que na eleição municipal.</figcaption>
         </figure>
       </div>
     </div>
@@ -334,7 +334,7 @@
           <a href="assets/forest_coef.png" target="_blank" rel="noopener">
             <img src="assets/forest_coef.png" alt="Forest plot dos coeficientes de regressão por cluster">
           </a>
-          <figcaption><b>Coeficientes padronizados (IC 95%)</b> por cluster (<i>forest plot</i>): cada ponto é o coeficiente estimado pela regressão OLS, a linha é o intervalo de confiança de 95%, e a linha tracejada marca o efeito nulo.</figcaption>
+          <figcaption><b>Coeficientes padronizados (IC 95%)</b> por cluster (<i>forest plot</i>). Cada ponto é o coeficiente estimado pela regressão OLS, a linha é o intervalo de confiança de 95%, e a linha tracejada marca o efeito nulo.</figcaption>
         </figure>
         <p style="margin-top:18px;">A razão renda média/mediana, proxy de desigualdade interna, é
         o preditor mais variável entre clusters (de 6,88 a 24,50); a densidade demográfica chega a
@@ -345,7 +345,7 @@
           <a href="assets/heatmap_por_cluster.png" target="_blank" rel="noopener">
             <img src="assets/heatmap_por_cluster.png" alt="Heatmap de correlações de Pearson por cluster">
           </a>
-          <figcaption><b>Correlação de Pearson por cluster</b>: os mesmos pares de variáveis do heatmap nacional, calculados separadamente dentro de cada um dos 3 clusters.</figcaption>
+          <figcaption><b>Correlação de Pearson por cluster</b>, com os mesmos pares de variáveis do heatmap nacional, calculados separadamente dentro de cada um dos 3 clusters.</figcaption>
         </figure>
       </div>
     </div>
@@ -371,11 +371,11 @@
             <a href="assets/mapa_lisa.png" target="_blank" rel="noopener">
               <img src="assets/mapa_lisa.png" alt="Mapa LISA do voto em Lula">
             </a>
-            <figcaption>Mapa LISA: clusters espaciais locais estatisticamente significativos (p &lt; 0,05, 999 permutações).</figcaption>
+            <figcaption>Mapa LISA, com clusters espaciais locais estatisticamente significativos (p &lt; 0,05, 999 permutações).</figcaption>
           </figure>
         </div>
         <p style="margin-top:18px;">O resultado confirma dependência espacial significativa
-        (Índice de Moran I = 0,889; p = 0,001 para o voto em Lula 2T): municípios vizinhos
+        (Índice de Moran I = 0,889; p = 0,001 para o voto em Lula 2T). Municípios vizinhos
         compartilham perfis de voto parecidos, formando blocos alto-alto no Norte e Nordeste e
         baixo-baixo no Centro-Sul-Sudeste, com poucas exceções locais. Isso também confirma que os
         clusters da Etapa 2, construídos só com dados socioeconômicos, coincidem com uma
@@ -390,7 +390,7 @@
       <p>Este trabalho procurou responder a uma pergunta: quais indicadores socioeconômicos
       explicam diferenças de comportamento eleitoral entre territórios brasileiros estruturalmente
       semelhantes? Os resultados apontam o eixo renda-raça-religião como o principal desses
-      indicadores, mas mostram que ele explica o voto de forma heterogênea: organiza o voto de
+      indicadores, mas mostram que ele explica o voto de forma heterogênea. Organiza o voto de
       forma mais nítida em alguns clusters do que em outros, e o voto se organiza em blocos
       territoriais contíguos, não de forma aleatória no mapa.</p>
       <p>O cluster de renda intermediária, com resultado próximo do empate entre Lula e Bolsonaro,

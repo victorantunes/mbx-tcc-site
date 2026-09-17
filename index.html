@@ -93,7 +93,7 @@
     display:flex; align-items:center; justify-content:center; font-family:'IBM Plex Mono', monospace;
     font-weight:600; font-size:13px; margin-top:2px;
   }
-  .stage-eyebrow{ font-family:'IBM Plex Mono', monospace; font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); font-weight:600; }
+  .stage-eyebrow{ font-family:'IBM Plex Mono', monospace; font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); font-weight:600; display:block; margin-bottom:8px; }
 
   /* figures */
   figure{ margin:18px 0 0; background:var(--bg-raised); border:1px solid var(--border); border-radius:12px; overflow:hidden; box-shadow:var(--shadow); }
@@ -159,7 +159,7 @@
 
   <section id="pergunta">
     <span class="eyebrow">Introdução</span>
-    <h2>Por que este trabalho</h2>
+    <h2>Motivação e objetivo</h2>
     <div class="prose">
       <p>As eleições do Executivo no Brasil apresentam padrão territorial marcante, sobretudo no
       ciclo 2018–2022, quando a disputa presidencial se polarizou fortemente entre os campos
@@ -291,7 +291,6 @@
       <div class="num-badge">1</div>
       <div>
         <span class="stage-eyebrow">Correlação</span>
-        <h3 class="stage-title">O quanto cada variável anda junto com o voto</h3>
         <p>A primeira etapa calculou a <b>correlação de Pearson e Spearman</b> entre as 13
         variáveis estruturais (raça, religião, renda, educação, densidade) e os desfechos
         eleitorais, com significância avaliada a p &lt; 0,05. O painel completo de correlações no
@@ -323,7 +322,7 @@
           </figure>
         </div>
         <div class="callout">
-          <span class="lbl">Por que isso importa</span>
+          <span class="lbl">Renda e raça são quase colineares</span>
           Como renda e raça são quase colineares, a correlação bivariada sozinha não diz qual das
           duas pesa mais no voto; só a regressão múltipla da Etapa 3, controlando as duas ao mesmo
           tempo, consegue separar esse efeito.
@@ -336,7 +335,6 @@
       <div class="num-badge">2</div>
       <div>
         <span class="stage-eyebrow">Clusterização</span>
-        <h3 class="stage-title">Agrupando municípios por perfil, sem olhar o voto</h3>
         <p>A segunda etapa segmentou os municípios por <b>K-means</b>, com base no mesmo bloco de
         13 variáveis estruturais padronizadas usado na correlação e também na regressão da Etapa 3.
         Empregar o mesmo bloco de variáveis nas duas etapas garante que a segmentação estrutural e
@@ -400,7 +398,6 @@
       <div class="num-badge">3</div>
       <div>
         <span class="stage-eyebrow">Regressão</span>
-        <h3 class="stage-title">Isolando o efeito de cada variável, controlando as demais</h3>
         <p>A terceira etapa estimou modelos de <b>regressão linear múltipla (OLS)</b> com
         erros-padrão robustos à heterocedasticidade (<b>HC3</b>), em escopos nacional e
         estratificado por cluster, considerando significativos os coeficientes com p &lt; 0,05.
@@ -446,7 +443,6 @@
       <div class="num-badge">4</div>
       <div>
         <span class="stage-eyebrow">Análise espacial</span>
-        <h3 class="stage-title">O lugar de um município importa?</h3>
         <p>As três etapas anteriores, de correlação, segmentação por cluster e regressão, tratam
         cada município como uma observação independente das demais, sem levar em conta sua posição
         no mapa. Essa suposição simplifica o cálculo estatístico, mas pode não se sustentar na

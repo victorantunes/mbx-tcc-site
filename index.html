@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Determinantes Sociais do Voto</title>
+<meta name="description" content="TCC MBA USP/Esalq — determinantes sociais do voto no Executivo brasileiro (2020–2022), a partir do Censo 2022 e do TSE.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f6f5f1;
+    --bg-raised:#ffffff;
+    --ink:#1b2129;
+    --ink-soft:#535d68;
+    --ink-faint:#8b9099;
+    --border:#dfdcd3;
+    --accent:#2b4c7e;
+    --accent-soft:#e6ecf5;
+    --green:#2f7d54;
+    --red:#a8432c;
+    --blue:#2b4c7e;
+    --shadow: 0 1px 2px rgba(20,20,15,0.06), 0 10px 30px rgba(20,20,15,0.06);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+    line-height:1.65; -webkit-font-smoothing:antialiased;
+  }
+  a{ color:var(--accent); }
+  .wrap{ max-width:980px; margin:0 auto; padding:0 24px; }
+
+  header.hero{ padding:88px 0 56px; border-bottom:1px solid var(--border); }
+  .kicker{
+    font-family:'IBM Plex Mono', monospace; font-size:12.5px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--accent); font-weight:600;
+    display:flex; align-items:center; gap:10px;
+  }
+  .kicker::before{ content:""; width:20px; height:2px; background:var(--accent); }
+  h1{
+    font-family:'Fraunces', Georgia, serif; font-weight:600; font-size:clamp(32px,5vw,52px);
+    line-height:1.08; margin:18px 0 20px; text-wrap:balance; max-width:16ch;
+  }
+  .lede{ max-width:62ch; color:var(--ink-soft); font-size:19px; }
+  .lede b{ color:var(--ink); font-weight:600; }
+  .hero-links{ margin-top:28px; display:flex; gap:14px; flex-wrap:wrap; }
+  .btn{
+    display:inline-flex; align-items:center; gap:8px; font-weight:600; font-size:14.5px;
+    padding:11px 20px; border-radius:8px; text-decoration:none; border:1px solid var(--border);
+  }
+  .btn.primary{ background:var(--ink); color:#fff; border-color:var(--ink); }
+  .btn.ghost{ color:var(--ink); background:var(--bg-raised); }
+
+  section{ padding:56px 0; border-bottom:1px solid var(--border); }
+  section:last-of-type{ border-bottom:none; }
+  h2{ font-family:'Fraunces', Georgia, serif; font-weight:600; font-size:26px; margin:0 0 28px; }
+
+  .stat-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+  .stat{ background:var(--bg-raised); padding:24px 20px; }
+  .stat .num{ font-family:'IBM Plex Mono', monospace; font-weight:600; font-size:28px; color:var(--accent); font-variant-numeric:tabular-nums; }
+  .stat .lbl{ font-size:13.5px; color:var(--ink-soft); margin-top:6px; }
+
+  .steps{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+  @media (max-width:800px){ .steps{ grid-template-columns:repeat(2,1fr); } }
+  .step{ background:var(--bg-raised); border:1px solid var(--border); border-radius:10px; padding:20px; box-shadow:var(--shadow); }
+  .step .n{ font-family:'IBM Plex Mono', monospace; color:var(--ink-faint); font-size:12px; letter-spacing:.08em; text-transform:uppercase; }
+  .step h3{ font-family:'Fraunces', Georgia, serif; font-weight:600; font-size:17px; margin:8px 0 8px; }
+  .step p{ font-size:14px; color:var(--ink-soft); margin:0; }
+
+  .gallery{ display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  @media (max-width:700px){ .gallery{ grid-template-columns:1fr; } }
+  figure{ margin:0; background:var(--bg-raised); border:1px solid var(--border); border-radius:12px; overflow:hidden; box-shadow:var(--shadow); }
+  figure img{ display:block; width:100%; height:auto; }
+  figcaption{ padding:14px 16px; font-size:13.5px; color:var(--ink-soft); }
+  figcaption b{ color:var(--ink); }
+
+  .cluster-legend{ display:flex; gap:18px; flex-wrap:wrap; margin-top:18px; font-size:14px; }
+  .cluster-legend span{ display:inline-flex; align-items:center; gap:8px; }
+  .dot{ width:12px; height:12px; border-radius:50%; display:inline-block; }
+
+  .findings p{ max-width:68ch; }
+  .findings ul{ max-width:68ch; padding-left:20px; }
+  .findings li{ margin-bottom:10px; }
+
+  .repo-note{ background:var(--accent-soft); border-radius:12px; padding:24px 28px; }
+  .repo-note p{ margin:0 0 8px; max-width:60ch; }
+  .repo-note p:last-child{ margin-bottom:0; }
+
+  footer{ padding:40px 0 80px; color:var(--ink-faint); font-size:13px; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="hero">
+    <span class="kicker">TCC · MBA Data Science e Analytics · USP/Esalq</span>
+    <h1>Determinantes Sociais do Voto</h1>
+    <p class="lede">
+      Uma análise de <b>3.076 municípios brasileiros</b>, cruzando o Censo Demográfico 2022 (IBGE)
+      com os resultados eleitorais do TSE (2020–2022), para entender como renda, raça, religião e
+      educação se associam ao voto no Executivo — e como essa associação muda de acordo com o
+      perfil socioeconômico e a localização de cada município.
+    </p>
+    <div class="hero-links">
+      <a class="btn primary" href="https://github.com/victorantunes/mbx-tcc" target="_blank" rel="noopener">Código-fonte (privado)</a>
+      <a class="btn ghost" href="#achados">Ver os achados</a>
+    </div>
+  </header>
+
+  <section id="achados">
+    <h2>Em números</h2>
+    <div class="stat-grid">
+      <div class="stat"><div class="num">3.076</div><div class="lbl">municípios analisados (93,71% da população nacional)</div></div>
+      <div class="stat"><div class="num">13</div><div class="lbl">variáveis estruturais: raça, religião, renda, educação, densidade</div></div>
+      <div class="stat"><div class="num">R² 0,830</div><div class="lbl">ajuste do modelo global de voto em Lula/Bolsonaro no 2º turno</div></div>
+      <div class="stat"><div class="num">I = 0,889</div><div class="lbl">Índice de Moran — autocorrelação espacial do voto (p = 0,001)</div></div>
+    </div>
+  </section>
+
+  <section class="findings">
+    <h2>O que os dados mostram</h2>
+    <ul>
+      <li>O voto em Lula no 2º turno associou-se <b>negativamente à renda média per capita</b>
+        (r = −0,804) e <b>positivamente ao percentual de população parda</b> (r = 0,711) — as duas
+        correlações mais fortes do estudo.</li>
+      <li>Segmentando os municípios por <b>K-means (k=3)</b> a partir do mesmo bloco de 13
+        variáveis, o ajuste do modelo de voto varia de <b>R² = 0,53 a R² = 0,75</b> conforme o
+        cluster — a mesma estrutura social explica o voto de forma bem mais completa em uns
+        contextos do que em outros.</li>
+      <li>O voto não se distribui aleatoriamente no mapa: municípios vizinhos tendem a votar de
+        forma parecida, formando <b>blocos territoriais contíguos</b> (Norte/Nordeste vs.
+        Centro-Sul) confirmados estatisticamente pelo Índice de Moran e pela estatística LISA.</li>
+    </ul>
+    <div class="cluster-legend">
+      <span><span class="dot" style="background:var(--green)"></span> Cluster 0 — resultado equilibrado, renda intermediária</span>
+      <span><span class="dot" style="background:var(--red)"></span> Cluster 1 — maioria de Lula, menor renda média</span>
+      <span><span class="dot" style="background:var(--blue)"></span> Cluster 2 — maioria de Bolsonaro, maior renda média</span>
+    </div>
+  </section>
+
+  <section>
+    <h2>Como a análise foi feita</h2>
+    <div class="steps">
+      <div class="step"><span class="n">Etapa 1</span><h3>Correlação</h3><p>Pearson e Spearman entre as 13 variáveis estruturais e os desfechos eleitorais.</p></div>
+      <div class="step"><span class="n">Etapa 2</span><h3>Clusterização</h3><p>K-means (k=3 principal, k=4 robustez) segmenta municípios por perfil, sem usar o voto.</p></div>
+      <div class="step"><span class="n">Etapa 3</span><h3>Regressão</h3><p>OLS com erros-padrão robustos (HC3), em escopo global e por cluster.</p></div>
+      <div class="step"><span class="n">Etapa 4</span><h3>Análise espacial</h3><p>Índice de Moran e LISA testam se o voto se organiza territorialmente.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Figuras selecionadas</h2>
+    <div class="gallery">
+      <figure>
+        <img src="assets/mapa_clusters.png" alt="Mapa dos clusters estruturais no Brasil">
+        <figcaption><b>Distribuição espacial dos clusters</b> — o perfil socioeconômico dos municípios, sem nenhuma informação de voto, já desenha fronteiras regionais nítidas.</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/mapa_lula.png" alt="Mapa do percentual de votos em Lula no 2º turno">
+        <figcaption><b>Votação em Lula (2º turno, 2022)</b> — o mapa eleitoral real, para comparação direta com o mapa de clusters ao lado.</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/mapa_lisa.png" alt="Mapa LISA do voto em Lula">
+        <figcaption><b>Mapa LISA</b> — clusters espaciais locais estatisticamente significativos (999 permutações), confirmando a dependência espacial do voto.</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/heatmap_correlacoes.png" alt="Heatmap de correlações de Pearson">
+        <figcaption><b>Correlações de Pearson</b> — todas as 13 variáveis estruturais contra os desfechos eleitorais, no agregado nacional.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section>
+    <div class="repo-note">
+      <p><b>Sobre o código e os dados.</b> Este trabalho ainda não foi defendido perante a banca, por
+      isso o repositório com os 12 notebooks, os dados processados e o texto completo do TCC
+      permanece privado por enquanto.</p>
+      <p>Se você é orientador, avaliador ou tem interesse acadêmico no material completo, entre em
+      contato para solicitar acesso.</p>
+    </div>
+  </section>
+
+  <footer>
+    Página gerada a partir dos resultados do TCC "Determinantes Sociais do Voto no Executivo
+    Brasileiro (2020–2022)" — Censo 2022 (IBGE) e dados eleitorais (TSE).
+  </footer>
+</div>
+
+</body>
+</html>

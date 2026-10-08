@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Determinantes Sociais do Voto</title>
-<meta name="description" content="TCC MBA USP/Esalq: determinantes sociais do voto no Executivo brasileiro (2020–2022), a partir do Censo 2022 e do TSE.">
+<title>Determinantes Sociais do Voto no Executivo Brasileiro (2020–2022)</title>
+<meta name="description" content="TCC MBA USP/Esalq: determinantes sociais do voto no Executivo brasileiro (2020–2022). Evidências do Censo 2022 e do TSE.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -49,7 +49,7 @@
   .kicker::before{ content:""; width:20px; height:2px; background:var(--accent); }
   h1{
     font-family:'Fraunces', Georgia, serif; font-weight:600; font-size:clamp(32px,5vw,52px);
-    line-height:1.08; margin:18px 0 20px; text-wrap:balance; max-width:18ch;
+    line-height:1.08; margin:18px 0 20px; text-wrap:balance; max-width:24ch;
   }
   .lede{ color:var(--ink-soft); font-size:19px; }
   .lede b{ color:var(--ink); font-weight:600; }
@@ -127,6 +127,17 @@
   .repo-note p:last-child{ margin-bottom:0; }
 
   footer{ padding:40px 0 80px; color:var(--ink-faint); font-size:13px; }
+
+  .subtitle{ font-family:'Fraunces', Georgia, serif; font-size:21px; color:var(--ink-soft); margin:-6px 0 20px; }
+  .prose p{ margin:0 0 16px; }
+  .prose p:last-child{ margin-bottom:0; }
+  .tbl-wrap{ overflow-x:auto; margin-top:18px; }
+  .tbl-wrap table.mini{ margin-top:0; }
+  table.mini.wide{ max-width:100%; }
+  table.mini th.grp{ text-align:center; }
+  .tbl-cap{ font-size:13px; color:var(--ink-soft); margin:8px 0 0; max-width:640px; }
+  .tbl-cap b{ color:var(--ink); }
+  figure.fig-wide{ margin-bottom:0; }
 </style>
 </head>
 <body>
@@ -134,12 +145,12 @@
 <div class="wrap">
   <header class="hero">
     <span class="kicker">TCC · MBA Data Science e Analytics · USP/Esalq</span>
-    <h1>Determinantes Sociais do Voto</h1>
+    <h1>Determinantes Sociais do Voto no Executivo Brasileiro (2020–2022)</h1>
+    <p class="subtitle">Evidências do Censo 2022 e do TSE</p>
     <p class="lede">
-      Uma análise de <b>3.076 municípios brasileiros</b>, cruzando o Censo Demográfico 2022 (IBGE)
-      com os resultados eleitorais do TSE (2020–2022), para entender como fatores sociais se
-      associam ao voto no Executivo e como essa associação muda conforme o perfil socioeconômico e
-      a localização de cada município.
+      Este trabalho teve como objetivo quantificar a associação entre <b>estrutura socioeconômica
+      municipal</b> e desempenho eleitoral do Executivo no Brasil, comparando padrões nacionais com
+      padrões estratificados por cluster e avaliando sua organização espacial.
     </p>
     <div class="question-block">
       <span class="lbl">Pergunta central</span>
@@ -148,239 +159,601 @@
     </div>
     <div class="hero-links">
       <a class="btn primary" href="https://github.com/victorantunes/mbx-tcc" target="_blank" rel="noopener">Código-fonte (privado)</a>
-      <a class="btn ghost" href="#achados">Ver os achados</a>
+      <a class="btn ghost" href="#resumo">Ler o resumo</a>
       <a class="btn ghost" href="#metodologia">Ver a metodologia</a>
+      <a class="btn ghost" href="#achados">Ver os resultados</a>
     </div>
   </header>
 
-  <section id="pergunta">
-    <span class="eyebrow">Introdução</span>
-    <h2>Motivação e objetivo</h2>
+  <section id="resumo">
+    <span class="eyebrow">Resumo</span>
     <div class="prose">
-      <p>As eleições do Executivo no Brasil apresentam padrão territorial marcante, sobretudo no
-      ciclo 2018–2022, quando a disputa presidencial se polarizou fortemente entre Lula (PT) e
-      Bolsonaro (PL), decidida por margem estreita no 2º turno de 2022 (50,90% a 49,10%).
-      Municípios com perfis sociais distintos em renda, raça, religião, escolaridade e densidade
-      urbana tendem a votar de maneira sistematicamente diferente.</p>
-      <p>A literatura brasileira já documentou o peso de fatores como transferência de renda
-      (Soares e Terron, 2008; Lício, Rennó e Castro, 2009), semelhança socioeconômica entre
-      municípios vizinhos (Marzagão, 2013) e identificação religiosa (Bonifácio, Machado e
-      Madeira, 2022) sobre o voto, mas poucos estudos combinam segmentação estrutural por cluster
-      e teste formal de autocorrelação espacial na mesma base analítica. Este trabalho integra
-      dados do Censo 2022 e do TSE para preencher essa lacuna, cobrindo eleições presidenciais,
-      estaduais e municipais no ciclo 2020–2022.</p>
-      <p>O objetivo foi quantificar o poder explicativo dos determinantes sociais sobre o voto no
-      Executivo, comparar padrões nacionais com padrões por cluster e avaliar a coerência espacial
-      dos resultados, sem converter esses resultados agregados municipais em inferência sobre o
-      voto individual, e com o cuidado de tratá-los como associação, não como causalidade.</p>
+      <p>Nas eleições presidenciais de 2022, o Brasil manteve um padrão de forte polarização
+      territorial entre os eleitorados de Lula e Bolsonaro, cuja relação com fatores sociais
+      municipais permaneceu pouco explorada de forma integrada, sobretudo combinando segmentação
+      estrutural e dependência espacial numa mesma base analítica. Diante dessa lacuna, este
+      trabalho teve como objetivo quantificar a associação entre estrutura socioeconômica municipal
+      e desempenho eleitoral do Executivo no Brasil, comparando padrões nacionais com padrões
+      estratificados por cluster e avaliando sua organização espacial. Foram integrados dados do
+      Censo 2022 (IBGE) e do TSE para 3076 municípios (população igual ou superior a 10 mil
+      habitantes, 93,71% da população nacional), submetidos a correlação de Pearson e Spearman,
+      segmentação por K-means (k=3 principal, k=4 robustez), regressão linear múltipla (OLS) com
+      erros-padrão robustos HC3 e testes de autocorrelação espacial (Índice de Moran e LISA, 999
+      permutações). O voto em Lula no 2º turno associou-se negativamente à renda média per capita
+      (r = −0,80) e positivamente ao percentual de população parda (r = 0,711), com ajuste elevado
+      nos modelos globais (R² = 0,830), heterogeneidade entre clusters (R² entre 0,529 e 0,751) e
+      autocorrelação espacial significativa (I = 0,889; p ≤ 0,001), revelando que renda, raça e
+      religião não pesaram da mesma forma em todo o território nacional. Concluímos que o eixo
+      socioeconômico é um determinante central do comportamento eleitoral brasileiro, cuja leitura
+      completa exigiu combinar segmentação estrutural por cluster com testes formais de dependência
+      espacial.</p>
+      <p><b>Palavras-chave:</b> comportamento eleitoral; desigualdade territorial; clusters
+      municipais; erros-padrão robustos; autocorrelação espacial.</p>
     </div>
 
-    <h3 class="stage-title" style="margin-top:32px;">Fontes de dados e unidade de análise</h3>
-    <div class="prose">
-      <p>Os dados socioeconômicos vêm do Censo Demográfico 2022, via SIDRA/IBGE; os eleitorais, do
-      repositório de dados abertos do TSE (2020 e 2022). A unidade de análise é o município,
-      integrado pelo código IBGE de 7 dígitos. Foram selecionados municípios com população igual
-      ou superior a 10.000 habitantes, o que resultou em <b>3.076 municípios (93,71% da população
-      nacional)</b>; nos modelos de regressão, a amostra cai para <b>2.645 municípios</b> pela
-      ausência de dados de abstenção e nulos/brancos em parte do país, sobretudo no Norte. As
-      análises usam treze variáveis estruturais (raça, religião, renda, educação, densidade
-      demográfica) e desfechos eleitorais que incluem o voto em Lula e Bolsonaro no 2º turno de
-      2022 e os blocos ideológicos construídos a partir da escala partidária de Bolognesi, Ribeiro
-      e Codato (2023).</p>
-    </div>
-  </section>
-
-  <section id="achados">
-    <span class="eyebrow">Resultados</span>
+    <div style="height:28px"></div>
     <div class="stat-grid">
-      <div class="stat"><div class="num">3.076</div><div class="lbl">municípios analisados (93,71% da população nacional)</div></div>
+      <div class="stat"><div class="num">3076</div><div class="lbl">municípios analisados (93,71% da população nacional)</div></div>
       <div class="stat"><div class="num">13</div><div class="lbl">variáveis estruturais: raça, religião, renda, educação, densidade</div></div>
       <div class="stat"><div class="num">R² 0,830</div><div class="lbl">ajuste do modelo global de voto em Lula/Bolsonaro no 2º turno</div></div>
       <div class="stat"><div class="num">I = 0,889</div><div class="lbl">Índice de Moran (autocorrelação espacial do voto, p = 0,001)</div></div>
     </div>
+  </section>
 
-    <div style="height:36px"></div>
-
-    <ol class="findings-list">
-      <li><b>Associações entre estrutura social e voto.</b> O voto em Lula no 2º turno apresenta
-        correlação negativa com renda per capita (r = −0,80) e população branca (r = −0,73), e
-        correlação positiva com população parda (r = 0,71) e baixa escolaridade (r = 0,67), todas
-        com p &lt; 0,001.</li>
-      <li><b>Renda, raça e religião em conjunto.</b> Municípios mais brancos tendem a ser mais ricos
-        (r = 0,77) e municípios mais pardos, mais pobres (r = −0,76); a religião tem associação bem
-        mais fraca com a renda, sugerindo que seu efeito sobre o voto passa por outro caminho.</li>
-      <li><b>Heterogeneidade por clusters.</b> O ajuste é alto no modelo nacional de Lula/Bolsonaro
-        2T (R² = 0,830), mas cai para entre R² = 0,53 e R² = 0,75 quando o mesmo modelo é ajustado
-        separadamente em cada cluster, e cai ainda mais no voto para prefeito (R² = 0,03–0,06).</li>
-      <li><b>O cluster mais equilibrado é o mais fácil de explicar, não o mais difícil.</b> O R² mede
-        o quanto o modelo acerta as diferenças dentro do cluster, não a distância até o empate, e o
-        cluster 0 é o que tem os municípios mais diferentes entre si.</li>
-      <li><b>Padrões espaciais.</b> O voto não se distribui ao acaso no mapa, já que municípios
-        vizinhos compartilham perfis de voto semelhantes (Índice de Moran I = 0,889; p = 0,001), com
-        Lula predominando no Norte/Nordeste e Bolsonaro no Centro-Sul.</li>
-    </ol>
+  <section id="pergunta">
+    <span class="eyebrow">Introdução</span>
+    <div class="prose">
+      <p>As eleições do Executivo no Brasil apresentam padrão territorial marcante, sobretudo no
+      ciclo 2018–2022, quando a disputa presidencial se polarizou fortemente entre os campos
+      liderados por Lula (PT) e Bolsonaro (PL), decidida por margem estreita no 2º turno de 2022
+      (50,90% a 49,10%). Essa polarização não se distribui de forma aleatória no território, uma
+      vez que municípios com perfis sociais distintos em renda, composição racial, religião,
+      escolaridade e densidade urbana tendem a votar de maneira sistematicamente diferente, de modo
+      a revelar clivagens sociais que possuem influências sobre o comportamento eleitoral da
+      população brasileira.</p>
+      <p>Existe ampla literatura brasileira de comportamento eleitoral que trata sobre essas
+      clivagens. Soares e Terron (2008) mostraram que a reconfiguração da base eleitoral de Lula
+      entre 2002 e 2006 esteve associada à difusão do Programa Bolsa Família nos municípios mais
+      pobres do Norte e Nordeste. Em linha semelhante, Lício et al. (2009) confirmaram, a partir de
+      dados de pesquisas de opinião, que a condição de beneficiário do Bolsa Família aumentava a
+      probabilidade de voto em Lula já em 2006. No campo metodológico da geografia eleitoral,
+      Marzagão (2013) demonstrou, com ferramentas de econometria espacial, que a semelhança
+      socioeconômica entre municípios vizinhos, e não apenas a interação social direta entre
+      eleitores, explica boa parte da autocorrelação espacial observada nos resultados eleitorais
+      brasileiros, o que dá suporte ao uso de indicadores como o Índice de Moran e a estatística
+      LISA adotados neste trabalho. Mais recentemente, Bonifacio et al. (2022) associaram o voto em
+      Bolsonaro em 2018 à identificação ideológica de direita, à rejeição ao PT e ao pertencimento
+      evangélico, o que nos indica a necessidade de utilizar variáveis sociais e religiosas para
+      compreender o realinhamento eleitoral do período.</p>
+      <p>Neste trabalho, utilizamos dados do Censo IBGE e resultados eleitorais do TSE para agrupar
+      3076 municípios brasileiros analisados em diferentes clusters, com base na semelhança dos
+      indicadores socioeconômicos desses municípios. Realizamos também um teste formal de
+      autocorrelação espacial para validar os achados da análise dos clusters.</p>
+      <p>Este trabalho concentra-se na análise de votos no Executivo (presidente, governador e
+      prefeito), não no Legislativo (deputados, senadores e vereadores), já que as eleições
+      majoritárias do Executivo geram um vencedor único e comparável por município, enquanto o
+      Legislativo, proporcional, elege uma bancada de partidos distintos sem vencedor único.</p>
+    </div>
   </section>
 
   <section id="metodologia">
     <span class="eyebrow">Metodologia</span>
-    <p class="prose">A análise foi conduzida em quatro etapas, utilizando técnicas apresentadas ao
-    longo do curso, da correlação bivariada simples até o teste formal de dependência espacial dos
-    resultados.</p>
 
-    <div style="height:24px"></div>
+    <h3 class="stage-title">Fontes de dados e unidade de análise</h3>
+    <div class="prose">
+      <p>Os dados socioeconômicos foram coletados da plataforma SIDRA, referentes ao Censo
+      Demográfico 2022 (IBGE, 2022), e os dados eleitorais foram obtidos do repositório de dados
+      abertos do Tribunal Superior Eleitoral, referentes às eleições de 2022 e de 2020 (TSE, 2022;
+      2020). A unidade de análise é o município, com integração pelo código IBGE de 7 dígitos e
+      rotinas de padronização das chaves administrativas (nome do município e UF) para resolver
+      divergências de grafia entre as bases.</p>
+    </div>
 
-    <!-- ETAPA 1 -->
+    <h3 class="stage-title" style="margin-top:36px;">Critério de inclusão e exclusão</h3>
+    <div class="prose">
+      <p>Com base no objetivo principal do trabalho, foram selecionados municípios brasileiros com
+      população total igual ou superior a 10.000 habitantes, critério que resultou em 3076
+      municípios (93,71% da população nacional). Esse corte foi adotado por três razões.
+      Primeiramente, buscamos reduzir a instabilidade estatística de percentuais calculados sobre
+      populações muito pequenas; em segundo lugar, para mitigar o efeito da supressão estatística
+      de células pelo IBGE em localidades de baixa contagem; e por fim, buscamos manter uma
+      estabilidade numérica nos coeficientes dos modelos de regressão. Nos modelos de regressão,
+      foram excluídos os municípios com valores ausentes em qualquer variável explicativa, no
+      desfecho eleitoral ou na atribuição de cluster, reduzindo a amostra de 3076 para 2645
+      municípios; a maior parte dessa perda decorre da ausência de dados de abstenção e
+      nulos/brancos para municípios cujo arquivo de detalhe de votação do TSE não continha registro
+      completo. Essa ausência não se distribui de forma uniforme pelo território, pois atinge 87%
+      dos municípios do Norte, de modo que a amostra de regressão sub-representa essa região em
+      todos os modelos, inclusive nos de voto em Lula e em Bolsonaro, cujos dados estão completos.
+      Ainda assim, optamos por uma amostra analítica comum a todos os desfechos, em vez de uma
+      amostra distinta por modelo, para que os ajustes fossem comparáveis entre si; o efeito dessa
+      perda sobre cada cluster é discutido na subseção “Modelos de regressão: escopo global e por
+      cluster”.</p>
+    </div>
+
+    <h3 class="stage-title" style="margin-top:36px;">Variáveis</h3>
+    <div class="prose">
+      <p>As análises feitas neste estudo se baseiam em treze variáveis: percentual de população
+      branca, preta e parda; percentual católico, evangélico e sem religião; percentual de mulheres
+      e gap de renda média por sexo; renda média per capita e razão renda média/mediana;
+      percentual de educação superior completa e percentual sem instrução ou com fundamental
+      incompleto; e log da densidade demográfica.</p>
+      <p>Os desfechos eleitorais (Y) incluem o voto em Lula e em Bolsonaro no 2º turno de 2022,
+      abstenção, nulos/brancos e os blocos ideológicos (esquerda, centro, direita) nas disputas
+      presidencial, estadual e municipal.</p>
+      <p>Os blocos ideológicos foram construídos a partir da escala de posicionamento partidário de
+      Bolognesi et al. (2023), que classifica cada partido político brasileiro numa escala contínua
+      de 1 (extrema esquerda) a 10 (extrema direita) com base em avaliação de especialistas. Cada
+      candidato eleito (presidente, governador ou prefeito) herda a posição do seu partido, e essa
+      posição é então classificada em três categorias, sendo elas: esquerda (1 a 3,99), centro (4
+      a 6,49) e direita (6,5 a 10), que por sua vez dão origem às variáveis <code>pct_esquerda</code>,
+      <code>pct_centro</code> e <code>pct_direita</code> usadas neste trabalho. É com base nessa
+      escala que transformamos a sigla partidária de cada candidato em uma posição comparável no
+      espectro político.</p>
+    </div>
+
+    <h3 class="stage-title" style="margin-top:36px;">Estatística descritiva das variáveis</h3>
+    <div class="prose">
+      <p>Foi calculada a estatística descritiva (média, desvio-padrão, mínimo, mediana e máximo)
+      das treze variáveis estruturais e dos desfechos eleitorais nucleares na amostra analítica de
+      3076 municípios, apresentada na seção de Resultados e Discussão.</p>
+    </div>
+
+    <h3 class="stage-title" style="margin-top:36px;">Modelos estatísticos e procedimentos analíticos</h3>
+    <div class="prose">
+      <p>A análise foi conduzida em quatro etapas, utilizando técnicas apresentadas ao longo do
+      curso.</p>
+    </div>
+
+    <div style="height:18px"></div>
+
     <div class="stage">
       <div class="num-badge">1</div>
       <div>
         <span class="stage-eyebrow">Correlação</span>
-        <p>A primeira etapa calculou a <b>correlação de Pearson e Spearman</b> entre as 13
-        variáveis estruturais e os desfechos eleitorais (p &lt; 0,05). No painel abaixo, células
-        mais escuras indicam correlação mais forte, com azul indicando relação negativa e vermelho,
-        relação positiva.</p>
-        <figure class="fig-wide">
-          <a href="assets/heatmap_correlacoes.png" target="_blank" rel="noopener">
-            <img src="assets/heatmap_correlacoes.png" alt="Heatmap de correlações de Pearson entre variáveis estruturais e desfechos eleitorais">
-          </a>
-          <figcaption><b>Heatmap de correlações de Pearson</b> entre 13 variáveis estruturais e 11 desfechos eleitorais, no agregado nacional.</figcaption>
-        </figure>
-        <p style="margin-top:18px;">Como passo intermediário, o trabalho também verificou como as
-        próprias variáveis estruturais se relacionam entre si. Por exemplo, municípios mais brancos
-        tendem a ser mais ricos, e municípios mais pardos, mais pobres, numa magnitude quase
-        idêntica à relação entre renda e voto.</p>
-        <div class="fig-pair">
-          <figure>
-            <a href="assets/raca_vs_renda.png" target="_blank" rel="noopener">
-              <img src="assets/raca_vs_renda.png" alt="Relação entre composição racial e renda per capita">
-            </a>
-            <figcaption>Raça × renda per capita (r = 0,77 para % branca; r = −0,76 para % parda).</figcaption>
-          </figure>
-          <figure>
-            <a href="assets/religiao_vs_renda.png" target="_blank" rel="noopener">
-              <img src="assets/religiao_vs_renda.png" alt="Relação entre composição religiosa e renda per capita">
-            </a>
-            <figcaption>Religião × renda per capita, associação bem mais fraca.</figcaption>
-          </figure>
-        </div>
-        <div class="callout">
-          <span class="lbl">Renda e raça são quase colineares</span>
-          Por isso a correlação bivariada sozinha não diz qual das duas pesa mais no voto; só a
-          regressão múltipla da Etapa 3, controlando as duas ao mesmo tempo, separa esse efeito.
-        </div>
+        <p>Na primeira etapa, realizamos exploração descritiva e cálculo de correlações bivariadas
+        de Pearson e Spearman entre as variáveis estruturais e os desfechos eleitorais, com
+        significância avaliada a p &lt; 0,05. Ainda nessa etapa, a relação entre renda, composição
+        racial e composição religiosa foi examinada por meio de gráficos de dispersão entre pares
+        dessas variáveis e do perfil médio de cada macrorregião administrativa, com o objetivo de
+        verificar como as variáveis estruturais se relacionam entre si antes de serem usadas em
+        conjunto na segmentação e na regressão.</p>
       </div>
     </div>
 
-    <!-- ETAPA 2 -->
     <div class="stage">
       <div class="num-badge">2</div>
       <div>
         <span class="stage-eyebrow">Clusterização</span>
-        <p>A segunda etapa segmentou os municípios por <b>K-means</b>, com base no mesmo bloco de
-        13 variáveis estruturais usado na correlação e na regressão da Etapa 3, sem incluir nenhum
-        desfecho eleitoral. O k ideal foi escolhido pelo <b>coeficiente de silhueta</b>, testado
-        para valores de k entre 2 e 6.</p>
-        <figure style="max-width:560px;">
-          <a href="assets/silhueta.png" target="_blank" rel="noopener">
-            <img src="assets/silhueta.png" alt="Coeficiente de silhueta por número de clusters">
-          </a>
-          <figcaption><b>Coeficiente de silhueta por k</b> (2 a 6), calculado sobre o mesmo bloco de 13 variáveis estruturais padronizadas.</figcaption>
-        </figure>
-        <p style="margin-top:18px;">A silhueta é maior em k=2 (0,261), mas k=2 força uma dicotomia
-        rico/pobre que esconde o grupo de renda intermediária, justamente o de votação mais
-        equilibrada entre Lula e Bolsonaro. Por isso, optou-se por k=3 como desenho principal, com
-        k=4 testado como robustez, que apenas refina os extremos de renda já identificados em k=3,
-        sem mudar as conclusões (R² de Lula 2T entre 0,53 e 0,75 em k=3, e entre 0,52 e 0,77 em
-        k=4).</p>
-        <figure class="fig-wide">
-          <a href="assets/mapa_clusters.png" target="_blank" rel="noopener">
-            <img src="assets/mapa_clusters.png" alt="Mapa dos clusters estruturais no Brasil">
-          </a>
-          <figcaption><b>Distribuição espacial dos 3 clusters</b>, construídos apenas com perfil socioeconômico, sem nenhuma informação de voto ou de localização.</figcaption>
-        </figure>
-        <table class="mini">
-          <thead><tr><th>Cluster</th><th>Municípios</th><th>Lula 2T</th><th>Bolsonaro 2T</th><th>Renda média</th></tr></thead>
-          <tbody>
-            <tr><td>0 (verde)</td><td>770</td><td>52,26%</td><td>47,74%</td><td>R$ 1.075,03</td></tr>
-            <tr><td>1 (vermelho)</td><td>1.187</td><td>73,91%</td><td>26,09%</td><td>R$ 778,30</td></tr>
-            <tr><td>2 (azul)</td><td>1.119</td><td>39,80%</td><td>60,20%</td><td>R$ 1.700,93</td></tr>
-          </tbody>
-        </table>
-        <div class="cluster-legend">
-          <span><span class="dot" style="background:var(--green)"></span> Cluster 0: resultado equilibrado, renda intermediária</span>
-          <span><span class="dot" style="background:var(--red)"></span> Cluster 1: maioria de Lula, menor renda média</span>
-          <span><span class="dot" style="background:var(--blue)"></span> Cluster 2: maioria de Bolsonaro, maior renda média</span>
-        </div>
-        <figure class="fig-wide" style="margin-top:24px;">
-          <a href="assets/perfil_eleitoral.png" target="_blank" rel="noopener">
-            <img src="assets/perfil_eleitoral.png" alt="Perfil eleitoral médio por cluster nas arenas presidencial, estadual e municipal">
-          </a>
-          <figcaption><b>Perfil eleitoral por cluster</b>, além do 2º turno presidencial, com os blocos ideológicos em governador e prefeito. A diferença entre clusters é maior em presidente/governador do que na eleição municipal.</figcaption>
-        </figure>
+        <p>Na segunda etapa, os municípios foram segmentados por K-means com base no mesmo bloco de
+        treze variáveis estruturais padronizadas descrito na subseção “Variáveis”, também usado na
+        regressão da terceira etapa. As variáveis de desfecho eleitoral foram deliberadamente
+        excluídas do agrupamento para evitar circularidade entre o critério de segmentação e o
+        resultado a ser explicado.</p>
+        <p>Utilizamos o coeficiente de silhueta para chegarmos ao melhor valor k que se aplicasse a
+        este problema, com valores de k entre 2 e 6, e optamos por fixar k=3 como desenho
+        principal, mantendo k=4 como teste de robustez. A documentação dessa decisão é apresentada
+        na subseção “Heterogeneidade estrutural por clusters”, junto com a caracterização dos
+        próprios clusters.</p>
       </div>
     </div>
 
-    <!-- ETAPA 3 -->
     <div class="stage">
       <div class="num-badge">3</div>
       <div>
         <span class="stage-eyebrow">Regressão</span>
-        <p>A terceira etapa estimou modelos de <b>regressão linear múltipla (OLS)</b> com
-        erros-padrão robustos à heterocedasticidade (<b>HC3</b>), em escopo nacional e por cluster
-        (p &lt; 0,05). O ajuste foi alto para Lula/Bolsonaro 2T (R² = 0,830), moderado para
-        nulos/brancos (R² = 0,346) e baixo para abstenção (R² = 0,275) e para prefeito
-        (R² = 0,03–0,06). O R² de Bolsonaro 2T é idêntico ao de Lula 2T em cada cluster porque, no
-        2º turno, um percentual é sempre o complemento do outro.</p>
-        <figure class="fig-wide">
-          <a href="assets/forest_coef.png" target="_blank" rel="noopener">
-            <img src="assets/forest_coef.png" alt="Forest plot dos coeficientes de regressão por cluster">
-          </a>
-          <figcaption><b>Coeficientes padronizados (IC 95%)</b> por cluster (<i>forest plot</i>), em que cada ponto é o coeficiente estimado pela regressão OLS, a linha é o intervalo de confiança de 95%, e a linha tracejada marca o efeito nulo.</figcaption>
-        </figure>
-        <p style="margin-top:18px;">A razão renda média/mediana, proxy de desigualdade interna, é
-        o preditor mais variável entre clusters (de 6,88 a 24,50); a densidade demográfica chega a
-        inverter de sinal; já o percentual evangélico se mantém estável nos três clusters. O mesmo
-        padrão de heterogeneidade, com inversões pontuais de sinal (paradoxo de Simpson), aparece
-        nas correlações por cluster abaixo.</p>
-        <figure class="fig-wide">
-          <a href="assets/heatmap_por_cluster.png" target="_blank" rel="noopener">
-            <img src="assets/heatmap_por_cluster.png" alt="Heatmap de correlações de Pearson por cluster">
-          </a>
-          <figcaption><b>Correlação de Pearson por cluster</b>, com os mesmos pares de variáveis do heatmap nacional, calculados separadamente dentro de cada um dos 3 clusters.</figcaption>
-        </figure>
+        <p>Na seção seguinte, foram estimados modelos de regressão linear múltipla (OLS) com
+        erros-padrão robustos à heterocedasticidade (HC3), em escopos nacional e estratificado por
+        cluster, considerando significativos os coeficientes com p &lt; 0,05.</p>
       </div>
     </div>
 
-    <!-- ETAPA 4 -->
     <div class="stage">
       <div class="num-badge">4</div>
       <div>
         <span class="stage-eyebrow">Análise espacial</span>
-        <p>As três etapas anteriores tratam cada município como independente dos demais, sem
-        considerar sua posição no mapa, o que pode fazer os modelos da Etapa 3 parecerem mais
-        precisos do que realmente são. A quarta etapa testa essa dependência com o <b>Índice de
-        Moran</b> (autocorrelação espacial global) e a estatística <b>LISA</b> (associação espacial
-        local), usando contiguidade Queen e 999 permutações.</p>
-        <div class="fig-pair">
-          <figure>
-            <a href="assets/mapa_lula.png" target="_blank" rel="noopener">
-              <img src="assets/mapa_lula.png" alt="Mapa do percentual de votos em Lula no 2º turno">
-            </a>
-            <figcaption>Votação em Lula (2º turno, 2022), com Índice de Moran I = 0,889 (p = 0,001).</figcaption>
-          </figure>
-          <figure>
-            <a href="assets/mapa_lisa.png" target="_blank" rel="noopener">
-              <img src="assets/mapa_lisa.png" alt="Mapa LISA do voto em Lula">
-            </a>
-            <figcaption>Mapa LISA, com clusters espaciais locais estatisticamente significativos (p &lt; 0,05, 999 permutações).</figcaption>
-          </figure>
-        </div>
-        <p style="margin-top:18px;">O resultado confirma dependência espacial significativa
-        (Índice de Moran I = 0,889; p = 0,001 para o voto em Lula 2T), já que municípios vizinhos
-        compartilham perfis de voto parecidos, formando blocos alto-alto no Norte e Nordeste e
-        baixo-baixo no Centro-Sul-Sudeste, com poucas exceções locais. Isso também confirma que os
-        clusters da Etapa 2, construídos só com dados socioeconômicos, coincidem com uma
-        organização real no território.</p>
+        <p>Por fim, a dependência espacial dos resultados foi testada por meio do Índice de Moran
+        global e da estatística LISA (Indicador Local de Associação Espacial), com matriz de
+        vizinhança por contiguidade Queen e 999 permutações, considerando significativos os
+        resultados com p &lt; 0,05.</p>
       </div>
+    </div>
+
+    <h3 class="stage-title" style="margin-top:36px;">Ferramentas e reprodutibilidade</h3>
+    <div class="prose">
+      <p>Todo o processamento foi feito em Python 3.12, em notebooks Jupyter, apoiados por scripts
+      auxiliares para leitura dos dados, classificação ideológica dos partidos e download dos
+      arquivos do TSE. Os dados tabulares foram tratados com <i>pandas</i> e <i>NumPy</i>, e as
+      correlações de Pearson e Spearman foram calculadas com <i>SciPy</i>. A padronização das
+      variáveis e o K-means (<i>scikit-learn</i>) usaram semente fixa
+      (<code>random_state=42</code>) e 20 inicializações, e os modelos OLS com erros-padrão HC3
+      foram estimados com <i>statsmodels</i>. A leitura das malhas municipais do IBGE foi feita com
+      <i>GeoPandas</i>, e a matriz de vizinhança Queen, o Índice de Moran e o LISA foram obtidos
+      com <i>libpysal</i> e <i>esda</i>. Os gráficos e mapas foram gerados com <i>matplotlib</i> e
+      <i>seaborn</i>, e este documento foi escrito em LaTeX. Todos os dados e notebooks usados
+      estão descritos no apêndice.</p>
+    </div>
+  </section>
+
+  <section id="achados">
+    <span class="eyebrow">Resultados e Discussão</span>
+
+    <h3 class="stage-title">Estatística descritiva das variáveis</h3>
+    <div class="prose">
+      <p>A Tabela 1 resume a distribuição das principais variáveis explicativas e dos desfechos
+      eleitorais nucleares na amostra analítica de 3076 municípios. Em geral, os indicadores
+      socioeconômicos apresentam ampla variação entre municípios, como é o caso do percentual de
+      população branca, que varia de menos de 1% a quase 92%, e da renda média domiciliar per
+      capita, que varia de R$ 288,65 a R$ 4.299,91. Estas variações sustentam a estratégia de
+      segmentação por clusters adotada na subseção “Heterogeneidade estrutural por clusters”, o
+      que permite uma análise mais precisa dos dados em grupos menores. Os desfechos eleitorais
+      também mostram dispersão considerável, com o voto em Lula no 2º turno variando de 16,28% a
+      92,30% entre municípios, com abstenção que varia entre 9,70% e 39,02%. As variáveis de
+      abstenção e nulos/brancos apresentam N menor (2646) pois não foi possível encontrar estes
+      dados nas bases disponíveis do TSE.</p>
+    </div>
+    <div class="tbl-wrap">
+      <table class="mini wide">
+        <thead><tr><th>Variável</th><th>N</th><th>Média</th><th>DP</th><th>Mín</th><th>Mediana</th><th>Máx</th></tr></thead>
+        <tbody>
+          <tr><td>% Branca</td><td>3076</td><td>39,64</td><td>21,59</td><td>0,99</td><td>34,08</td><td>91,67</td></tr>
+          <tr><td>% Preta</td><td>3076</td><td>9,23</td><td>6,37</td><td>0,37</td><td>7,62</td><td>58,48</td></tr>
+          <tr><td>% Parda</td><td>3076</td><td>49,72</td><td>18,48</td><td>4,17</td><td>55,00</td><td>92,68</td></tr>
+          <tr><td>% Católica</td><td>3076</td><td>64,86</td><td>14,57</td><td>18,97</td><td>65,70</td><td>93,81</td></tr>
+          <tr><td>% Evangélica</td><td>3076</td><td>24,38</td><td>9,98</td><td>4,18</td><td>23,54</td><td>73,53</td></tr>
+          <tr><td>% Sem religião</td><td>3076</td><td>6,68</td><td>4,91</td><td>0,12</td><td>5,29</td><td>31,02</td></tr>
+          <tr><td>% Mulheres</td><td>3076</td><td>50,50</td><td>1,24</td><td>44,62</td><td>50,58</td><td>54,66</td></tr>
+          <tr><td>Gap renda média H-M (R$)</td><td>3076</td><td>45,30</td><td>52,89</td><td>−108,39</td><td>38,38</td><td>328,31</td></tr>
+          <tr><td>Renda média per capita (R$)</td><td>3076</td><td>1188,22</td><td>503,26</td><td>288,65</td><td>1129,29</td><td>4299,91</td></tr>
+          <tr><td>Razão renda média/mediana</td><td>3076</td><td>1,38</td><td>0,13</td><td>1,06</td><td>1,36</td><td>2,92</td></tr>
+          <tr><td>% Educação superior completa</td><td>3076</td><td>10,66</td><td>5,20</td><td>1,95</td><td>9,60</td><td>45,20</td></tr>
+          <tr><td>% Sem instrução/fund. incompleto</td><td>3076</td><td>42,86</td><td>10,68</td><td>12,78</td><td>43,26</td><td>72,65</td></tr>
+          <tr><td>Log da densidade demográfica</td><td>3076</td><td>3,68</td><td>1,57</td><td>−1,90</td><td>3,64</td><td>9,50</td></tr>
+          <tr><td>% Voto em Lula (2T)</td><td>3076</td><td>56,08</td><td>19,25</td><td>16,28</td><td>54,16</td><td>92,30</td></tr>
+          <tr><td>% Voto em Bolsonaro (2T)</td><td>3076</td><td>43,92</td><td>19,25</td><td>7,70</td><td>45,84</td><td>83,72</td></tr>
+          <tr><td>% Abstenção</td><td>2646</td><td>21,17</td><td>4,31</td><td>9,70</td><td>20,91</td><td>39,02</td></tr>
+          <tr><td>% Nulos/brancos</td><td>2646</td><td>4,46</td><td>1,43</td><td>1,15</td><td>4,30</td><td>9,33</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tbl-cap"><b>Tabela 1.</b> Estatística descritiva das variáveis do estudo. N = número de municípios; DP = desvio padrão; Mín = mínimo; Máx = máximo.</p>
+
+    <h3 class="stage-title" style="margin-top:44px;">Associações entre estrutura social e voto</h3>
+    <div class="prose">
+      <p>Dentre os dados analisados, o voto em Lula no 2º turno apresentou correlação negativa com
+      renda média per capita (r = −0,80; p &lt; 0,001), percentual de população branca (r = −0,73;
+      p &lt; 0,001) e escolaridade superior (r = −0,65; p &lt; 0,001). Em sentido oposto,
+      observamos correlação positiva com percentual de população parda (r = 0,71; p &lt; 0,001) e
+      com baixa escolaridade (r = 0,67; p &lt; 0,001). O percentual evangélico mostrou associação
+      negativa (r = −0,50; p &lt; 0,001) no recorte global, e o painel completo de correlações
+      entre variáveis sociais e desfechos eleitorais é apresentado na Figura 1.</p>
+    </div>
+    <figure class="fig-wide">
+      <a href="assets/heatmap_correlacoes.png" target="_blank" rel="noopener">
+        <img src="assets/heatmap_correlacoes.png" alt="Heatmap de correlações de Pearson entre variáveis sociais e desfechos eleitorais">
+      </a>
+      <figcaption><b>Figura 1.</b> Correlação de Pearson entre variáveis sociais e desfechos eleitorais no agregado nacional. Azul = correlação negativa; vermelho = correlação positiva.</figcaption>
+    </figure>
+    <div class="prose" style="margin-top:18px;">
+      <p>Esses resultados sugerem clivagem socioeconômica consistente no plano nacional, com direção
+      oposta para o voto em Bolsonaro no 2º turno por simetria dos desfechos binários agregados.
+      Esse padrão é compatível com o observado por Lício et al. (2009) para o efeito de renda e
+      transferência de renda sobre o voto em Lula em 2006, e reforça o argumento de Bonifacio et
+      al. (2022) de que fatores sociais e religiosos organizam parte relevante do realinhamento
+      eleitoral entre 2018 e 2022. A Figura 1 também evidencia que abstenção e nulos/brancos
+      guardam correlações bem mais fracas com o bloco estrutural do que o voto de 2º turno.</p>
+    </div>
+
+    <h3 class="stage-title" style="margin-top:44px;">Análises conjuntas entre renda, raça e religião</h3>
+    <div class="prose">
+      <p>A Figura 1 indica que renda, composição racial e religião estão entre os correlatos mais
+      fortes do voto. Isso mostra o quanto cada variável é forte isoladamente para prever desfecho
+      eleitoral, mas não é suficiente para inferir como essas variáveis se relacionam entre si.
+      Nesta seção, avaliamos essas variáveis de forma conjunta, para justificar um controle por
+      múltiplas variáveis ao longo da análise, tanto na regressão, quanto na segmentação de
+      municípios por perfil socioeconômico.</p>
+    </div>
+    <figure class="fig-wide">
+      <a href="assets/raca_vs_renda.png" target="_blank" rel="noopener">
+        <img src="assets/raca_vs_renda.png" alt="Relação entre composição racial e renda média per capita municipal">
+      </a>
+      <figcaption><b>Figura 2.</b> Relação entre composição racial e renda média per capita municipal. Cada ponto = um município.</figcaption>
+    </figure>
+    <div class="prose" style="margin-top:18px;">
+      <p>A Figura 2 mostra que composição racial e renda per capita são fortemente correlacionadas
+      entre si. O percentual de população branca associa-se positivamente à renda média per capita
+      (r = 0,769), enquanto o percentual de população parda associa-se negativamente e com
+      magnitude semelhante (r = −0,755).</p>
+    </div>
+    <figure class="fig-wide">
+      <a href="assets/religiao_vs_renda.png" target="_blank" rel="noopener">
+        <img src="assets/religiao_vs_renda.png" alt="Relação entre composição religiosa e renda média per capita municipal">
+      </a>
+      <figcaption><b>Figura 3.</b> Relação entre composição religiosa e renda média per capita municipal. Cada ponto = um município; linha vermelha = tendência linear (OLS).</figcaption>
+    </figure>
+    <div class="prose" style="margin-top:18px;">
+      <p>A Figura 3 repete o exercício da Figura 2, agora para três grupos religiosos. O percentual
+      católico apresenta associação fraca e negativa com a renda (r = −0,201), e o percentual
+      evangélico, associação fraca e positiva (r = 0,150), sendo ambas bem mais tênues do que a
+      associação evangélica direta com o voto discutida na subseção “Modelos de regressão: escopo
+      global e por cluster”, sugerindo que o efeito da religião sobre o voto não passa
+      majoritariamente pela renda média per capita do município.</p>
+      <p>As duas figuras anteriores tratam a relação estrutural par a par, comparando uma variável
+      racial ou religiosa contra a renda. Em seguida, verificamos se esse mesmo eixo aparece
+      também quando as variáveis são agregadas em grupos maiores e não comparadas ponto a ponto
+      entre 3076 municípios individuais.</p>
+    </div>
+    <div class="tbl-wrap">
+      <table class="mini wide">
+        <thead><tr><th>Região</th><th>% Branca</th><th>% Parda</th><th>% Católica</th><th>% Evangélica</th><th>Renda média</th><th>Renda mediana</th></tr></thead>
+        <tbody>
+          <tr><td>Norte</td><td>17,92</td><td>67,27</td><td>52,49</td><td>36,48</td><td>829,33</td><td>568,98</td></tr>
+          <tr><td>Nordeste</td><td>24,72</td><td>62,51</td><td>71,28</td><td>18,95</td><td>775,37</td><td>556,25</td></tr>
+          <tr><td>Centro-Oeste</td><td>35,27</td><td>54,03</td><td>57,24</td><td>30,37</td><td>1.515,77</td><td>1.083,85</td></tr>
+          <tr><td>Sudeste</td><td>49,48</td><td>40,85</td><td>60,90</td><td>26,75</td><td>1.452,08</td><td>1.069,65</td></tr>
+          <tr><td>Sul</td><td>72,47</td><td>22,73</td><td>67,59</td><td>23,09</td><td>1.760,12</td><td>1.300,25</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tbl-cap"><b>Tabela 2.</b> Perfil socioeconômico médio por macrorregião administrativa. Nota: renda média e mediana per capita em R$.</p>
+    <div class="prose" style="margin-top:18px;">
+      <p>A Tabela 2 agrega o mesmo perfil socioeconômico pelas cinco macrorregiões administrativas
+      do país, onde é possível visualizar um contraste Norte/Nordeste e Sul/Sudeste. A renda média
+      per capita mais que dobra do Nordeste (R$ 775,37) para o Sul (R$ 1.760,12), acompanhada por
+      uma inversão forte na composição racial predominante (de 24,72% de população branca no
+      Nordeste para 72,47% no Sul). Essa heterogeneidade regional indica uma possível confirmação
+      para o eixo renda-raça demonstrado nas figuras anteriores. Dito isso, as fronteiras estaduais
+      e regionais são convenções político-administrativas, não necessariamente representando as
+      segmentações reais dos perfis sociais dos municípios nelas contidos. A divisão por clusters
+      apresentada na próxima seção retoma esse mesmo eixo renda-raça, mas deixando que a própria
+      estrutura dos dados, e não a divisão administrativa do território, defina os grupos
+      comparados.</p>
+    </div>
+
+    <h3 class="stage-title" style="margin-top:44px;">Heterogeneidade estrutural por clusters</h3>
+    <div class="prose">
+      <p>O coeficiente de silhueta é maior em k=2 (0,261) e decresce de forma consistente até k=4
+      (0,221), com algumas oscilações a partir daí, como mostra a Figura 4. Por esse critério
+      isolado, dividir o país em apenas dois grupos produziria a separação estatisticamente mais
+      nítida.</p>
+    </div>
+    <figure style="max-width:560px;">
+      <a href="assets/silhueta.png" target="_blank" rel="noopener">
+        <img src="assets/silhueta.png" alt="Coeficiente de silhueta por número de clusters">
+      </a>
+      <figcaption><b>Figura 4.</b> Coeficiente de silhueta por número de clusters (k=2 a 6). Linhas tracejadas = k=3 (principal) e k=4 (robustez).</figcaption>
+    </figure>
+    <div class="prose" style="margin-top:18px;">
+      <p>Optamos, contudo, por fixar k=3 como desenho principal, por duas razões que o desenho da
+      Figura 4 não capta. Primeiro, k=2 força uma dicotomia (por exemplo, “rico” versus “pobre”),
+      que oculta as complexidades das camadas médias de renda da população e que, como mostra a
+      Tabela 4 a seguir, corresponde justamente ao grupo cujo resultado eleitoral é o mais
+      equilibrado e, por isso, mais relevante para uma possível estratégia de competitividade
+      eleitoral; segundo, utilizar três grupos corresponde a uma leitura subjetiva direta e
+      facilmente compreensível pelo senso comum (renda baixa, intermediária e alta), sem introduzir
+      a complexidade adicional de uma quarta categoria. O desenho com k=4 foi mantido como teste de
+      robustez, independentemente de não maximizar a silhueta, para verificar se essa escolha a
+      priori alterava as conclusões centrais do trabalho.</p>
+    </div>
+    <div class="tbl-wrap">
+      <table class="mini wide">
+        <thead>
+          <tr><th rowspan="2">Variável</th><th colspan="3" class="grp">k=3</th><th colspan="4" class="grp">k=4</th></tr>
+          <tr><th>0 (verde)</th><th>1 (vermelho)</th><th>2 (azul)</th><th>0</th><th>1</th><th>2</th><th>3</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>N municípios</td><td>770</td><td>1187</td><td>1119</td><td>1070</td><td>476</td><td>681</td><td>849</td></tr>
+          <tr><td>Lula 2T (%)</td><td>52,26</td><td>73,91</td><td>39,80</td><td>75,43</td><td>42,93</td><td>55,04</td><td>39,91</td></tr>
+          <tr><td>Bolsonaro 2T (%)</td><td>47,74</td><td>26,09</td><td>60,20</td><td>24,57</td><td>57,07</td><td>44,96</td><td>60,09</td></tr>
+          <tr><td>Renda média pc</td><td>1.075,03</td><td>778,30</td><td>1.700,93</td><td>763,54</td><td>1.749,09</td><td>970,98</td><td>1.583,23</td></tr>
+          <tr><td>% Branca</td><td>27,46</td><td>25,81</td><td>62,70</td><td>25,26</td><td>50,83</td><td>24,46</td><td>63,67</td></tr>
+          <tr><td>% Parda</td><td>57,20</td><td>62,89</td><td>30,59</td><td>63,55</td><td>38,71</td><td>59,94</td><td>30,24</td></tr>
+          <tr><td>% Católica</td><td>48,20</td><td>75,80</td><td>64,71</td><td>76,95</td><td>51,78</td><td>50,14</td><td>68,76</td></tr>
+          <tr><td>% Evangélica</td><td>34,80</td><td>17,62</td><td>24,39</td><td>16,56</td><td>30,13</td><td>34,60</td><td>22,82</td></tr>
+          <tr><td>R² (Lula 2T)</td><td>0,751</td><td>0,673</td><td>0,529</td><td>0,572</td><td>0,626</td><td>0,774</td><td>0,522</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tbl-cap"><b>Tabela 3.</b> Comparação entre as segmentações k=3 e k=4. N = número de municípios; Lula e Bolsonaro = percentual médio de votos válidos no 2º turno; pc = per capita; R² = ajuste do modelo OLS de Lula 2T.</p>
+    <div class="prose" style="margin-top:18px;">
+      <p>A Tabela 3 demonstra que k=4 não introduz um grupo qualitativamente novo, apenas refina as
+      faixas extremas de renda já identificadas. O cluster de menor renda do k=3 (cluster 1, R$
+      778,30, 73,91% em Lula) reaparece quase inalterado no k=4 (cluster 0, R$ 763,54, 75,43% em
+      Lula); o cluster de maior renda do k=3 (azul, R$ 1700,93, 60,20% em Bolsonaro) é dividido em
+      dois no k=4 (clusters 1 e 3, R$ 1749,09 e R$ 1583,23, ambos com maioria de Bolsonaro entre
+      57% e 60%); e o cluster de renda intermediária do k=3 (cluster 0, R$ 1075,03, votação
+      equilibrada) dá origem a um novo grupo de renda ligeiramente mais baixa (cluster 2, R$
+      970,98, 55,04% em Lula), mantendo o mesmo caráter de disputa mais acirrada. O ajuste do
+      modelo de Lula no segundo turno (2T) permanece na mesma faixa nas duas segmentações: entre
+      0,529 e 0,751 no k=3, entre 0,522 e 0,774 no k=4, e demonstra que a decisão de adotar k=4
+      produz apenas uma divisão nos clusters de renda mais alta, sem que isso se traduza em uma
+      diferença expressiva de desfecho eleitoral entre ambos os clusters de maior renda. Dessa
+      forma, sustentamos a decisão de reportar k=3 como resultado principal, pois a divisão em
+      quatro grupos refina os extremos sem melhorar a leitura dos resultados do trabalho.</p>
+      <p>A segmentação por clusters revelou perfis municipais distintos, detalhados na Tabela 4.
+      No cluster 0 (770 municípios, verde nas figuras), o voto em Lula e em Bolsonaro no 2º turno
+      ficou próximo do equilíbrio (52,26% e 47,74%, respectivamente), com renda média per capita
+      intermediária (R$ 1.075,03); no cluster 1 (1187 municípios, vermelho), o de menor renda
+      média (R$ 778,30), Lula obteve ampla maioria (73,91% contra 26,09%); e no cluster 2 (1119
+      municípios, azul), o de maior renda média (R$ 1.700,93), Bolsonaro venceu com folga (60,20%
+      contra 39,80%).</p>
+    </div>
+    <div class="tbl-wrap">
+      <table class="mini">
+        <thead><tr><th>Cluster</th><th>N municípios</th><th>Lula 2T (%)</th><th>Bolsonaro 2T (%)</th><th>Renda média pc</th></tr></thead>
+        <tbody>
+          <tr><td>0 (verde)</td><td>770</td><td>52,26</td><td>47,74</td><td>1.075,03</td></tr>
+          <tr><td>1 (vermelho)</td><td>1187</td><td>73,91</td><td>26,09</td><td>778,30</td></tr>
+          <tr><td>2 (azul)</td><td>1119</td><td>39,80</td><td>60,20</td><td>1.700,93</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tbl-cap"><b>Tabela 4.</b> Perfil eleitoral e socioeconômico médio por cluster estrutural (k=3). N = número de municípios; Lula e Bolsonaro = percentual médio de votos válidos no 2º turno; pc = per capita.</p>
+    <div class="cluster-legend">
+      <span><span class="dot" style="background:var(--green)"></span> Cluster 0: resultado equilibrado, renda intermediária</span>
+      <span><span class="dot" style="background:var(--red)"></span> Cluster 1: maioria de Lula, menor renda média</span>
+      <span><span class="dot" style="background:var(--blue)"></span> Cluster 2: maioria de Bolsonaro, maior renda média</span>
+    </div>
+    <div class="prose" style="margin-top:18px;">
+      <p>Essa gradação confirma que a renda média municipal por cluster acompanha de perto o
+      sentido do voto majoritário, e reforça a leitura de que o eixo socioeconômico organiza uma
+      parte significativa da competição eleitoral para o Executivo. Contudo, essa gradação se
+      mostra mais heterogênea quando analisamos as demais esferas do voto para o Executivo, como
+      mostra a Figura 5, que compara o perfil eleitoral médio de cada cluster nas disputas
+      presidencial, estadual e municipal.</p>
+    </div>
+    <figure class="fig-wide">
+      <a href="assets/perfil_eleitoral.png" target="_blank" rel="noopener">
+        <img src="assets/perfil_eleitoral.png" alt="Perfil eleitoral médio por cluster nas arenas presidencial, estadual e municipal">
+      </a>
+      <figcaption><b>Figura 5.</b> Perfil eleitoral médio por cluster estrutural (k=3) nas arenas presidencial, estadual e municipal. Cores seguem a Tabela 4 (0=verde, 1=vermelho, 2=azul).</figcaption>
+    </figure>
+    <div class="prose" style="margin-top:18px;">
+      <p>O gráfico mostra que a diferença entre clusters é mais acentuada nos blocos ideológicos de
+      presidente e governador do que na eleição municipal de prefeito de 2020. Este achado indica
+      que a estrutura social selecionada explica melhor a disputa em arenas de maior escala
+      territorial do que a disputa municipal, o que é confirmado quantitativamente na subseção
+      “Modelos de regressão: escopo global e por cluster”.</p>
+      <p>Essa segmentação também apresenta organização geográfica nítida, como projetado na Figura
+      6.</p>
+    </div>
+    <figure class="fig-wide">
+      <a href="assets/mapa_clusters.png" target="_blank" rel="noopener">
+        <img src="assets/mapa_clusters.png" alt="Mapa dos clusters estruturais no Brasil">
+      </a>
+      <figcaption><b>Figura 6.</b> Distribuição espacial dos clusters estruturais (k=3). Cores seguem a Tabela 4 (0=verde, 1=vermelho, 2=azul); cinza = municípios fora do recorte de 10 mil habitantes.</figcaption>
+    </figure>
+    <div class="prose" style="margin-top:18px;">
+      <p>Na Figura 6 observamos concentração espacial nítida, na qual o cluster de menor renda e
+      maior votação em Lula (cluster 1, vermelho) predomina nas regiões Norte e Nordeste, enquanto
+      o cluster de maior renda e maior votação em Bolsonaro (cluster 2, azul) concentra-se no
+      Centro-Sul, sobretudo em São Paulo e no Sul do país.</p>
+    </div>
+
+    <h3 class="stage-title" style="margin-top:44px;">Modelos de regressão: escopo global e por cluster</h3>
+    <div class="prose">
+      <p>Nos modelos globais, o ajuste foi elevado para Lula 2T e Bolsonaro 2T (R² = 0,830),
+      moderado para nulos/brancos (R² = 0,346) e menor para abstenção (R² = 0,275). Nos blocos
+      presidenciais de 1º turno, os modelos também apresentaram alto ajuste (esquerda R² = 0,827;
+      direita R² = 0,814). Para prefeito 2020, o ajuste foi baixo (esquerda R² = 0,056; direita
+      R² = 0,027), sugerindo maior peso de fatores locais não observados. A variação desse ajuste
+      entre clusters, para o desfecho Lula 2T, é detalhada na Tabela 5: R² = 0,751 no cluster 0,
+      R² = 0,673 no cluster 1 e R² = 0,529 no cluster 2.</p>
+    </div>
+    <div class="tbl-wrap">
+      <table class="mini wide">
+        <thead><tr><th>Cluster</th><th>R² (Lula 2T)</th><th>R² (Bolsonaro 2T)</th><th>Lula 2T (%)</th><th>Bolsonaro 2T (%)</th><th>Renda média pc</th></tr></thead>
+        <tbody>
+          <tr><td>0 (verde)</td><td>0,751</td><td>0,751</td><td>52,26</td><td>47,74</td><td>1.075,03</td></tr>
+          <tr><td>1 (vermelho)</td><td>0,673</td><td>0,673</td><td>73,91</td><td>26,09</td><td>778,30</td></tr>
+          <tr><td>2 (azul)</td><td>0,529</td><td>0,529</td><td>39,80</td><td>60,20</td><td>1.700,93</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tbl-cap"><b>Tabela 5.</b> Ajuste (R²) dos modelos OLS por cluster estrutural (k=3). R² = proporção da variação do voto explicada pelo modelo, igual para Lula e Bolsonaro porque os percentuais são complementares; pc = per capita.</p>
+    <div class="prose" style="margin-top:18px;">
+      <p>O R² de Bolsonaro 2T é idêntico ao de Lula 2T em cada cluster porque as duas variáveis
+      carregam a mesma informação, dado que no 2º turno há apenas dois candidatos, então o
+      percentual de Bolsonaro é sempre 100% menos o percentual de Lula, e vice-versa. Abstenção e
+      nulos/brancos são calculados de forma diferente (sobre o eleitorado e sobre o comparecimento,
+      não sobre os votos válidos) e por isso não são considerados nessa etapa.</p>
+      <p>O cluster 0 apresenta os desfechos eleitorais mais equilibrados dentre o conjunto, e é
+      também o mais heterogêneo quanto à composição dos municípios que o integram. Alguns
+      municípios neste cluster votam quase 90% em Lula, enquanto outros votam menos de 20%. Nos
+      clusters 1 e 2, o mais pobre e o mais rico, respectivamente, ocorre o oposto: os municípios
+      se parecem mais entre si, e a pouca diferença que existe é menos explicada pelas mesmas
+      variáveis, sinal de que outras variáveis não utilizadas neste trabalho podem pesar mais entre
+      os municípios de maior e menor renda.</p>
+      <p>Os votos brancos e nulos também afetam essa comparação, embora de forma indireta. Pelo
+      desenho do estudo, um município só entra na regressão se tiver dado completo em todos os
+      desfechos eleitorais, inclusive abstenção e nulos/brancos, mesmo no modelo de Lula 2T, que
+      não usa esse dado diretamente. O TSE, porém, não tem esse registro completo para 87% dos
+      municípios do Norte, a região mais pobre e mais presente nos clusters 0 e 1. Por isso, esses
+      dois clusters perdem bem mais municípios ao entrar na regressão (26% e 19%,
+      respectivamente) do que o cluster 2 (apenas 0,2%). Os valores de R² da Tabela 5 descrevem,
+      portanto, apenas os municípios com esse dado completo, não o total de cada cluster.</p>
+    </div>
+    <figure class="fig-wide">
+      <a href="assets/forest_coef.png" target="_blank" rel="noopener">
+        <img src="assets/forest_coef.png" alt="Forest plot dos coeficientes de regressão por cluster">
+      </a>
+      <figcaption><b>Figura 7.</b> Coeficientes padronizados (IC 95%) dos modelos de Lula 2T e Bolsonaro 2T, por cluster estrutural (k=3). Linha vertical = efeito nulo.</figcaption>
+    </figure>
+    <div class="prose" style="margin-top:18px;">
+      <p>A Figura 7, um <i>forest plot</i>, compara os coeficientes dos modelos de Lula 2T e
+      Bolsonaro 2T entre clusters, onde cada ponto marca o coeficiente padronizado estimado pela
+      regressão OLS para uma variável dentro de um cluster específico, e a linha horizontal ao
+      redor do ponto é o intervalo de confiança de 95%. O eixo vertical lista as combinações de
+      variável e cluster (identificadas por “C0”, “C1” e “C2”), na mesma ordem nos dois painéis,
+      definida pelo coeficiente estimado no modelo de Lula 2T, e o eixo horizontal mede a
+      magnitude do coeficiente, com uma linha tracejada vertical em zero marcando a ausência de
+      efeito.</p>
+      <p>A importância relativa dos preditores fica visível na própria figura ao analisar a razão
+      entre renda média e mediana, que se trata de um proxy de desigualdade interna de renda do
+      município. Este é o preditor com maior amplitude de coeficiente entre clusters no modelo de
+      Lula 2T (de 6,88 no cluster 1 a 24,50 no cluster 2), indicando que o peso da desigualdade de
+      renda sobre o voto muda de forma acentuada conforme o perfil socioeconômico do cluster. O
+      log da densidade demográfica chega a inverter de sinal entre clusters (positivo nos clusters
+      0 e 2, negativo no cluster 1), sugerindo que o efeito da urbanização sobre o voto não é
+      uniforme no país. Em contraste, o percentual evangélico mantém sinal e magnitude semelhantes
+      nos três clusters (entre −0,57 e −0,67), um preditor cujo efeito parece mais robusto ao
+      contexto socioeconômico local do que o de renda ou densidade. Padrão semelhante de
+      heterogeneidade aparece nas correlações bivariadas por cluster, apresentadas na Figura 8.</p>
+    </div>
+    <figure class="fig-wide">
+      <a href="assets/heatmap_por_cluster.png" target="_blank" rel="noopener">
+        <img src="assets/heatmap_por_cluster.png" alt="Heatmap de correlações de Pearson por cluster">
+      </a>
+      <figcaption><b>Figura 8.</b> Correlação de Pearson por cluster estrutural (k=3). Azul = correlação negativa; vermelho = correlação positiva.</figcaption>
+    </figure>
+    <div class="prose" style="margin-top:18px;">
+      <p>Na Figura 8, em alguns pares de variáveis, a magnitude da correlação muda
+      substancialmente entre clusters e, em casos pontuais, o sinal se inverte em relação ao
+      padrão nacional. Isto nos indica que os indicadores sociais capturados do IBGE não são
+      suficientes para chegarmos a um resultado com ampla correlação com o voto no executivo
+      municipal.</p>
+    </div>
+
+    <h3 class="stage-title" style="margin-top:44px;">Padrões espaciais</h3>
+    <div class="prose">
+      <p>As três etapas anteriores de correlação, segmentação por cluster e regressão tratam cada
+      município como uma observação independente das demais, sem levar em conta sua posição no
+      mapa. Nesta seção, verificamos se municípios próximos entre si tendem a votar de forma
+      semelhante. A regressão da subseção anterior trata os municípios usados neste trabalho como
+      pontos de informação totalmente distintos entre si, e por isso seus intervalos de confiança
+      e valores de p podem passar mais segurança do que realmente têm, de modo que a análise
+      espacial busca verificar a hipótese dos dados da regressão.</p>
+      <p>A análise espacial indicou dependência geográfica significativa no comportamento eleitoral
+      municipal (Índice de Moran I = 0,889; p = 0,001 para o voto em Lula 2T), com municípios
+      vizinhos tendendo a compartilhar perfis semelhantes de votação. A Figura 9 mapeia essa
+      distribuição no território.</p>
+    </div>
+    <figure class="fig-wide">
+      <a href="assets/mapa_lula.png" target="_blank" rel="noopener">
+        <img src="assets/mapa_lula.png" alt="Mapa do percentual de votos em Lula no 2º turno de 2022, por município">
+      </a>
+      <figcaption><b>Figura 9.</b> Percentual de votos em Lula no 2º turno de 2022, por município. Cinza = sem dados.</figcaption>
+    </figure>
+    <div class="prose" style="margin-top:18px;">
+      <p>O mapa revela grandes blocos territoriais contíguos de votação semelhante, com
+      predominância de Lula nas regiões Norte e Nordeste e predominância de Bolsonaro no
+      Centro-Sul. Estes achados corroboram Soares e Terron (2008) sobre a formação de blocos
+      eleitorais regionais e a tese de Marzagão (2013) sobre a semelhança socioeconômica entre
+      municípios vizinhos. A estrutura local dos redutos eleitorais encontrados é detalhada na
+      Figura 10, por meio do mapa LISA (Indicador Local de Associação Espacial).</p>
+    </div>
+    <figure class="fig-wide">
+      <a href="assets/mapa_lisa.png" target="_blank" rel="noopener">
+        <img src="assets/mapa_lisa.png" alt="Mapa LISA do voto em Lula no 2º turno">
+      </a>
+      <figcaption><b>Figura 10.</b> Mapa LISA do voto em Lula no 2º turno (p &lt; 0,05, 999 permutações). High-High e Low-Low = clusters locais de votação alta e baixa; High-Low e Low-High = outliers; cinza = não significativo.</figcaption>
+    </figure>
+    <div class="prose" style="margin-top:18px;">
+      <p>Predominam clusters do tipo alto-alto (municípios de alta votação em Lula cercados por
+      vizinhos também de alta votação) concentrados no Norte e Nordeste, e clusters baixo-baixo no
+      Centro-Sul-Sudeste, com poucos municípios classificados como outliers locais (alto-baixo ou
+      baixo-alto). A escassez de outliers indica que exceções ao padrão regional dominante são
+      relativamente raras no recorte analisado.</p>
     </div>
   </section>
 
@@ -389,29 +762,53 @@
     <div class="prose">
       <p>Este trabalho procurou responder a uma pergunta: quais indicadores socioeconômicos
       explicam diferenças de comportamento eleitoral entre territórios brasileiros estruturalmente
-      semelhantes? Os resultados apontam o eixo renda-raça-religião como o principal desses
-      indicadores, mas mostram que ele explica o voto de forma heterogênea, organizando-o de forma
-      mais nítida em alguns clusters do que em outros; o voto, por sua vez, se organiza em blocos
-      territoriais contíguos, não de forma aleatória no mapa.</p>
-      <p>O cluster de renda intermediária, com resultado próximo do empate entre Lula e Bolsonaro,
-      concentra os municípios eleitoralmente mais competitivos do país; os clusters de maioria já
-      consolidada são os redutos eleitorais tradicionais. A autocorrelação espacial indica que uma
-      política capaz de mudar esse eixo socioeconômico tende a reorganizar o mapa eleitoral por
-      regiões inteiras, não por municípios isolados.</p>
-      <p>O estudo tem quatro limitações. Em primeiro lugar, as associações partem de médias
-      municipais, não de dados individuais: um município rico com alta votação em Bolsonaro não
-      significa que os eleitores mais ricos votaram nele, apenas que as duas médias caminham juntas
-      (a falácia ecológica). Em segundo lugar, o desenho é transversal, um retrato de um único
-      momento, o que permite medir associação, mas não causalidade nem a estabilidade dessas
-      associações ao longo de diferentes ciclos eleitorais. Em terceiro lugar, faltam dados de
-      abstenção e nulos/brancos para 87% dos municípios do Norte, a região mais pobre e mais
-      presente nos clusters 0 e 1, que por isso perdem bem mais municípios ao entrar na regressão
-      (26% e 19%) do que o cluster 2 (0,2%). Por fim, o percentual de mulheres é a variável que
-      menos varia entre municípios e, como o K-means padroniza todas as variáveis antes de agrupar,
-      ela acaba pesando menos que as outras doze na formação dos clusters.</p>
-      <p>Como direção futura, sugere-se incorporar dados de eleições anteriores para testar a
-      estabilidade dos clusters, e explorar variáveis adicionais, como o efeito de novas políticas
-      públicas sobre o voto.</p>
+      semelhantes? Os resultados confirmaram que os indicadores socioeconômicos dos municípios
+      brasileiros estão fortemente associados ao desempenho eleitoral do voto no Executivo. Ao
+      segmentarmos perfis socioeconômicos por clusters, vimos que essa associação não é homogênea,
+      dado que foi possível visualizar que o eixo renda-raça-religião organiza o voto de forma mais
+      nítida em alguns contextos socioeconômicos do que em outros. A análise espacial confirmou,
+      adicionalmente, que o voto se organiza em blocos territoriais contíguos, e não de forma
+      aleatória no mapa.</p>
+      <p>Este trabalho reúne, numa mesma base municipal, um estudo de segmentação estrutural e um
+      teste formal de dependência espacial para o ciclo eleitoral 2020–2022. O resultado dessa
+      metodologia nos permite identificar que o poder explicativo da estrutura social dos
+      municípios analisados não é o mesmo nos três clusters (0, 1 e 2). O cluster 0, com desfecho
+      eleitoral médio próximo do empate entre Lula e Bolsonaro no segundo turno, é também aquele em
+      que as variáveis estruturais melhor explicam o voto (R² = 0,751), o que indica que, apesar do
+      equilíbrio na média, os municípios desse cluster diferem bastante entre si e que essa
+      diferença acompanha o perfil socioeconômico. O cluster 1, de menor renda e ampla maioria de
+      Lula, também apresenta ajuste elevado (R² = 0,673), enquanto o cluster 2, de maior renda e
+      maioria de Bolsonaro, apresenta o menor ajuste (R² = 0,529), de modo que a estrutura social
+      explica menos as diferenças de voto entre os seus municípios. Para além disso, a
+      autocorrelação espacial confirma que o eixo renda-raça-religião não se distribui de forma
+      difusa pelo território, mas se concentra em blocos contíguos. Isso abre a hipótese de que
+      fatores externos ao escopo desse trabalho, como por exemplo uma política de transferência de
+      renda ou de ampliação de acesso à educação superior, alterem o mapa eleitoral por regiões
+      inteiras e não por municípios isolados; por ser um estudo de associação, porém, este
+      trabalho não a testa, e verificá-la exigiria um desenho causal próprio.</p>
+      <p>O estudo apresenta três ressalvas que devem ser consideradas na leitura dos resultados. Em
+      primeiro lugar, as associações identificadas partem de médias municipais, não de dados
+      pessoais individuais, e por isso não podem ser lidas como o comportamento de um eleitor
+      específico; por exemplo, um município com renda média alta e alta votação em Bolsonaro não
+      implica que os eleitores mais ricos desse município tenham votado nele, apenas que as duas
+      médias caminham juntas no nível agregado (falácia ecológica). A segunda limitação se deve ao
+      fato dos dados terem sido coletados num único ponto no tempo, de modo que não é possível
+      observar se essas associações se mantêm estáveis ao longo de diferentes ciclos eleitorais.
+      Em terceiro lugar, os dados de abstenção e de votos nulos/brancos representam uma quantidade
+      de municípios ligeiramente menor (2646 municípios, ante os 3076 do restante do estudo),
+      porque a base de dados de votação do TSE não dispõe desse registro completo para todos os
+      municípios do recorte populacional, e com o agravante de que essa falta de dados se expressa
+      de forma desigual ao longo do território, pois o TSE não tem esse registro completo para 87%
+      dos municípios do Norte, a região mais pobre e mais presente nos clusters 0 e 1.
+      Proporcionalmente, os clusters 0 e 1 perdem bem mais municípios ao entrar na regressão feita
+      nesse estudo (26% e 19%, respectivamente) do que o cluster 2 (apenas 0,2%).</p>
+      <p>Como direção futura de pesquisa, sugerimos incorporar dados de eleições anteriores para
+      testar a estabilidade temporal dos clusters identificados, bem como a adição de outras
+      variáveis explicativas, como por exemplo a aprovação de novas políticas públicas e seus
+      efeitos sobre desfechos eleitorais. Sugerimos também estender esta mesma abordagem ao voto no
+      Legislativo, deixado fora do escopo deste trabalho pela natureza proporcional dessas
+      eleições, substituindo o resultado eleitoral único usado aqui por um índice agregado de
+      posição ideológica da bancada eleita em cada município.</p>
     </div>
   </section>
 
@@ -419,12 +816,12 @@
     <span class="eyebrow">Referências</span>
     <div class="prose" style="font-size:14.5px; color:var(--ink-soft);">
       <p style="margin-bottom:14px;">BOLOGNESI, B.; RIBEIRO, E.; CODATO, A. Uma nova classificação
-      ideológica dos partidos políticos brasileiros. <i>Dados — Revista de Ciências Sociais</i>,
+      ideológica dos partidos políticos brasileiros. <i>Dados – Revista de Ciências Sociais</i>,
       v. 66, n. 2, 2023.</p>
-      <p style="margin-bottom:14px;">BONIFÁCIO, R.; MACHADO, Y.; MADEIRA, G. Do baixo clero à
+      <p style="margin-bottom:14px;">BONIFACIO, R.; MACHADO, Y.; MADEIRA, G. Do baixo clero à
       Presidência da República: explicando o voto em Bolsonaro nas eleições presidenciais de 2018.
       <i>Revista SAAP</i>, Buenos Aires, v. 16, n. 2, p. 260–288, 2022.</p>
-      <p style="margin-bottom:14px;">IBGE — INSTITUTO BRASILEIRO DE GEOGRAFIA E ESTATÍSTICA.
+      <p style="margin-bottom:14px;">IBGE – INSTITUTO BRASILEIRO DE GEOGRAFIA E ESTATÍSTICA.
       <i>Censo Demográfico 2022</i>. Rio de Janeiro: IBGE, 2022. Disponível em:
       <a href="https://sidra.ibge.gov.br" target="_blank" rel="noopener">sidra.ibge.gov.br</a>.</p>
       <p style="margin-bottom:14px;">LÍCIO, E. C.; RENNÓ, L. R.; CASTRO, H. C. O. Bolsa Família e
@@ -435,20 +832,23 @@
       <p style="margin-bottom:14px;">SOARES, G. A. D.; TERRON, S. L. Dois Lulas: a geografia
       eleitoral da reeleição (explorando conceitos, métodos e técnicas de análise geoespacial).
       <i>Opinião Pública</i>, Campinas, v. 14, n. 2, p. 269–301, 2008.</p>
-      <p style="margin-bottom:14px;">TSE — TRIBUNAL SUPERIOR ELEITORAL. <i>Repositório de dados
-      eleitorais — Eleições 2020</i>. Brasília: TSE, 2020. Disponível em:
+      <p style="margin-bottom:14px;">TSE – TRIBUNAL SUPERIOR ELEITORAL. <i>Repositório de dados
+      eleitorais – Eleições 2020</i>. Brasília: TSE, 2020. Disponível em:
       <a href="https://dadosabertos.tse.jus.br" target="_blank" rel="noopener">dadosabertos.tse.jus.br</a>.</p>
-      <p style="margin-bottom:0;">TSE — TRIBUNAL SUPERIOR ELEITORAL. <i>Repositório de dados
-      eleitorais — Eleições 2022</i>. Brasília: TSE, 2022. Disponível em:
+      <p style="margin-bottom:0;">TSE – TRIBUNAL SUPERIOR ELEITORAL. <i>Repositório de dados
+      eleitorais – Eleições 2022</i>. Brasília: TSE, 2022. Disponível em:
       <a href="https://dadosabertos.tse.jus.br" target="_blank" rel="noopener">dadosabertos.tse.jus.br</a>.</p>
     </div>
   </section>
 
-  <section>
+  <section id="apendice">
+    <span class="eyebrow">Apêndice</span>
     <div class="repo-note">
-      <p><b>Sobre o código e os dados.</b> Este trabalho ainda não foi defendido perante a banca,
-      por isso o repositório com os 12 notebooks, os dados processados e o texto completo do TCC
-      permanece privado por enquanto.</p>
+      <p><b>Código e dados.</b> O código completo deste trabalho, com os notebooks, os módulos
+      auxiliares e os dados processados, está no repositório
+      <a href="https://github.com/victorantunes/mbx-tcc" target="_blank" rel="noopener">github.com/victorantunes/mbx-tcc</a>.
+      Este trabalho ainda não foi defendido perante a banca, por isso o repositório permanece
+      privado por enquanto.</p>
       <p>Se você é orientador, avaliador ou tem interesse acadêmico no material completo, entre em
       contato pelo e-mail
       <a href="mailto:victor.antunes.ignacio@gmail.com">victor.antunes.ignacio@gmail.com</a>
@@ -457,11 +857,12 @@
   </section>
 
   <footer>
-    <p style="margin:0 0 6px;">Victor Antunes Ignácio de Medeiros Pereira da Silva. TCC do MBA em
-    Data Science e Analytics, USP/Esalq, 2026.</p>
-    <p style="margin:0;">Página gerada a partir dos resultados do TCC "Determinantes Sociais do
-    Voto no Executivo Brasileiro (2020–2022)", com dados do Censo 2022 (IBGE) e do TSE. Clique em
-    qualquer figura para abri-la em tamanho real.</p>
+    <p style="margin:0 0 6px;">Victor Antunes Ignácio de Medeiros Pereira da Silva (MBA em Data
+    Science e Analytics, USP/Esalq) e André Luís Ramos Sanches (Doutor em Economia Aplicada,
+    ESALQ/USP). TCC do MBA em Data Science e Analytics, USP/Esalq, 2026.</p>
+    <p style="margin:0;">Página gerada a partir do texto e das figuras do TCC “Determinantes Sociais
+    do Voto no Executivo Brasileiro (2020–2022): Evidências do Censo 2022 e do TSE”, com dados do
+    Censo 2022 (IBGE) e do TSE. Clique em qualquer figura para abri-la em tamanho real.</p>
   </footer>
 </div>
 
